@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
  * @author sm@creativefusion.net
  */
 public interface BeerService {
+    Mono<BeerDTO> saveNewBeer(BeerDTO beerDTO);
     Flux<BeerDTO> listBeers();
     Mono<BeerDTO> getBeerById(Integer beerId);
 }

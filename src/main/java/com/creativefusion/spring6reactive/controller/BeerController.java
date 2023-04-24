@@ -3,11 +3,17 @@ package com.creativefusion.spring6reactive.controller;
 import com.creativefusion.spring6reactive.model.BeerDTO;
 import com.creativefusion.spring6reactive.services.BeerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sm@creativefusion.net
@@ -18,6 +24,21 @@ public class BeerController {
     public static final String BEER_PATH = "/api/v2/beer";
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
     private final BeerService beerService;
+
+    @PostMapping(BEER_PATH)
+    ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO){
+        AtomicInteger atomicInteger = new AtomicInteger();
+
+        beerService.saveNewBeer(beerDTO).subscribe(savedDto -> {
+            atomicInteger.set(savedDto.getId());
+        });
+        return ResponseEntity.created(
+                UriComponentsBuilder
+                        .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + atomicInteger.get())
+                        .build()
+                        .toUri()).build();
+
+    }
 
     @GetMapping(BEER_PATH)
     Flux<BeerDTO> listBeers(){
