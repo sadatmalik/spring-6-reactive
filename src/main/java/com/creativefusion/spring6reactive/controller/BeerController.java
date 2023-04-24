@@ -26,27 +26,26 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping(BEER_PATH)
-    ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO){
+    ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO) {
         AtomicInteger atomicInteger = new AtomicInteger();
 
-        beerService.saveNewBeer(beerDTO).subscribe(savedDto -> {
-            atomicInteger.set(savedDto.getId());
-        });
+        beerService.saveNewBeer(beerDTO)
+                .subscribe(savedDto -> atomicInteger.set(savedDto.getId()));
+
         return ResponseEntity.created(
                 UriComponentsBuilder
                         .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + atomicInteger.get())
                         .build()
                         .toUri()).build();
-
     }
 
     @GetMapping(BEER_PATH)
-    Flux<BeerDTO> listBeers(){
+    Flux<BeerDTO> listBeers() {
         return beerService.listBeers();
     }
 
     @GetMapping(BEER_PATH_ID)
-    Mono<BeerDTO> getBeerById(@PathVariable("beerId") Integer beerId){
+    Mono<BeerDTO> getBeerById(@PathVariable("beerId") Integer beerId) {
         return beerService.getBeerById(beerId);
     }
 
