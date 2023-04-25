@@ -1,5 +1,6 @@
 package com.creativefusion.spring6reactive.controller;
 
+import com.creativefusion.spring6reactive.model.BeerDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -20,5 +21,14 @@ class BeerControllerTest {
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
                 .expectBody().jsonPath("$.size()").isEqualTo(3);
+    }
+
+    @Test
+    void testGetById() {
+        webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals("Content-type", "application/json")
+                .expectBody(BeerDTO.class);
     }
 }
