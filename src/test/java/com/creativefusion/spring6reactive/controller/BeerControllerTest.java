@@ -1,5 +1,6 @@
 package com.creativefusion.spring6reactive.controller;
 
+import com.creativefusion.spring6reactive.domain.Beer;
 import com.creativefusion.spring6reactive.model.BeerDTO;
 import com.creativefusion.spring6reactive.repositories.BeerRepositoryTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -28,6 +29,18 @@ class BeerControllerTest {
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().location("http://localhost:8080/api/v2/beer/4");
+    }
+
+    @Test
+    void testCreateBeerBadData() {
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerName("");
+
+        webTestClient.post().uri(BeerController.BEER_PATH)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .header("Content-Type", "application/json")
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
