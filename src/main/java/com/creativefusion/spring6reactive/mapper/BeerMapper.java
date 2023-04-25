@@ -1,4 +1,4 @@
-package com.creativefusion.spring6reactive;
+package com.creativefusion.spring6reactive.mapper;
 
 import com.creativefusion.spring6reactive.domain.Beer;
 import com.creativefusion.spring6reactive.model.BeerDTO;

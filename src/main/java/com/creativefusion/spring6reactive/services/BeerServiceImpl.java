@@ -1,6 +1,6 @@
 package com.creativefusion.spring6reactive.services;
 
-import com.creativefusion.spring6reactive.BeerMapper;
+import com.creativefusion.spring6reactive.mapper.BeerMapper;
 import com.creativefusion.spring6reactive.model.BeerDTO;
 import com.creativefusion.spring6reactive.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
